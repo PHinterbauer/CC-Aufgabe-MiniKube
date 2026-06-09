@@ -2,6 +2,49 @@
 
 This project is for educational purpose. It illustrates a project with some relevant tools for DevOps.
 
+## Project Structure
+
+```text
+.
+├── .git/                         # Git repository metadata
+├── .github/
+│   └── workflows/
+│       └── CI.yml                # GitHub Actions CI workflow
+├── client/
+│   ├── Dockerfile                # Nginx container for the frontend
+│   ├── index.html                # Static frontend page
+│   └── nginx.conf                # Nginx configuration
+├── grafana/
+│   ├── dashboards/               # Grafana dashboard definitions
+│   └── provisioning/             # Grafana datasource/dashboard provisioning
+├── server/
+│   ├── Dockerfile                # FastAPI backend container
+│   ├── src/app/                  # Backend application code
+│   └── tests/                    # Pytest backend tests
+├── docker-compose.yml            # Local multi-container setup
+├── myapp.yml                     # Minikube/Kubernetes backend deployment
+├── prometheus.yml                # Prometheus scrape configuration
+├── pyproject.toml                # Python project metadata and test dependencies
+├── deploy-local.ps1              # Starts the local Docker Compose deployment
+├── deploy-minikube.ps1           # Builds and deploys the backend to Minikube
+└── stop-minikube.ps1             # Stops the Minikube deployment
+```
+
+## Included DevOps Concepts
+
+This repository includes:
+
+- Git version control with repository metadata in `.git/`.
+- GitHub project automation with a GitHub Actions CI workflow in `.github/workflows/CI.yml`.
+- A client-server architecture:
+  - Backend: a FastAPI project in `server/src/app`, packaged with `pyproject.toml`.
+  - Backend tests: pytest tests in `server/tests`.
+  - Frontend: a static client served by Nginx from `client/`.
+- Docker-based local deployment with `docker-compose.yml`.
+- Minikube/Kubernetes deployment for the backend using `myapp.yml`.
+- Prometheus metrics scraping using `prometheus.yml` and the backend `/metrics` endpoint.
+- Grafana monitoring dashboards and provisioning in `grafana/`.
+
 ## Quickstart
 
 ### Run the full stack with Docker Compose
