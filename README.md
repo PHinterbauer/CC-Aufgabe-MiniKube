@@ -1,5 +1,7 @@
 # Content
 
+This project is for educational purpose. It illustrates a project with some relevant tools for DevOps.
+
 ## Quickstart
 
 ### Run the full stack with Docker Compose
