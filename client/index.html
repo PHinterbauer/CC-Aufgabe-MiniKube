@@ -7,190 +7,47 @@
     <style>
       body {
         font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-        margin: 0;
-        min-height: 100vh;
+        margin: 2rem;
         color: #1f2937;
-        background:
-          radial-gradient(circle at top, rgba(56, 189, 248, 0.18), transparent 35%),
-          linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
-        display: grid;
-        place-items: center;
-        padding: 2rem;
       }
       .card {
-        width: min(880px, 100%);
-        padding: 2rem;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.88);
-        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
-        backdrop-filter: blur(8px);
+        max-width: 480px;
+        padding: 1.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
       }
       h1 {
-        margin: 0;
-        font-size: clamp(2rem, 4vw, 3rem);
-        line-height: 1.05;
+        margin: 0 0 0.5rem 0;
+        font-size: 1.5rem;
       }
       p {
-        margin: 0;
+        margin: 0 0 1rem 0;
       }
-      .grid {
-        display: grid;
-        gap: 1rem;
-        margin-top: 1.5rem;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      }
-      .panel {
-        border: 1px solid rgba(148, 163, 184, 0.28);
-        border-radius: 16px;
-        padding: 1rem;
-        background: rgba(248, 250, 252, 0.9);
-      }
-      label {
-        display: block;
-        font-size: 0.9rem;
-        margin-bottom: 0.35rem;
-        color: #334155;
-      }
-      input {
-        width: 100%;
-        box-sizing: border-box;
-        border: 1px solid #cbd5e1;
-        border-radius: 10px;
-        padding: 0.7rem 0.85rem;
-        font: inherit;
-        background: white;
-      }
-      .actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-top: 1rem;
-      }
-      button {
-        border: 0;
-        border-radius: 999px;
-        padding: 0.8rem 1rem;
-        font: inherit;
-        cursor: pointer;
-        background: #0f172a;
-        color: white;
-      }
-      button.secondary {
-        background: #334155;
-      }
-      button.danger {
-        background: #b91c1c;
-      }
-      .message {
-        margin-top: 1rem;
-        padding: 0.9rem 1rem;
-        border-radius: 12px;
-        background: #e2e8f0;
-      }
-      .hint {
-        color: #475569;
-        margin-top: 0.5rem;
-      }
-      .status {
-        margin-top: 0.75rem;
-        font-weight: 600;
-      }
-      .mono {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      }
-      .endpoint-list {
-        margin: 0.75rem 0 0;
-        padding-left: 1.2rem;
+      code {
+        background: #f3f4f6;
+        padding: 0.2rem 0.4rem;
+        border-radius: 6px;
       }
     </style>
   </head>
   <body>
     <div class="card">
-      <h1>FastAPI Benutzerverwaltung</h1>
-      <p class="hint">Die Benutzer-Routen werden direkt per Pfad angesprochen, ohne Query-Parameter in der Adresszeile.</p>
-      <p class="status">Status: <span id="status">lade...</span></p>
-
-      <div class="grid">
-        <div class="panel">
-          <label for="user-id">Benutzer-ID</label>
-          <input id="user-id" type="number" min="1" value="1" />
-
-          <label for="user-name" style="margin-top: 0.9rem;">Name</label>
-          <input id="user-name" type="text" value="Anna" />
-
-          <label for="user-age" style="margin-top: 0.9rem;">Alter</label>
-          <input id="user-age" type="number" min="0" value="31" />
-
-          <label for="user-email" style="margin-top: 0.9rem;">E-Mail</label>
-          <input id="user-email" type="email" value="anna@example.com" />
-
-          <div class="actions">
-            <button id="create-user">Benutzer anlegen</button>
-            <button id="update-user" class="secondary">Benutzer bearbeiten</button>
-            <button id="delete-user" class="danger">Benutzer löschen</button>
-          </div>
-          <div id="message" class="message">Noch keine Aktion ausgeführt.</div>
-        </div>
-
-        <div class="panel">
-          <p><strong>Wichtige Endpunkte</strong></p>
-          <ul class="endpoint-list">
-            <li><span class="mono">POST /api/users/{id}</span></li>
-            <li><span class="mono">PUT /api/users/{id}</span></li>
-            <li><span class="mono">DELETE /api/users/{id}</span></li>
-            <li><span class="mono">GET /api/health</span></li>
-            <li><span class="mono">GET /metrics</span></li>
-          </ul>
-        </div>
-      </div>
+      <h1>FastAPI + Nginx</h1>
+      <p>Status: <span id="status">lade...</span></p>
+      <p>
+        Beispiel:
+        <code>/api/add?x=2&amp;y=3</code>
+      </p>
     </div>
     <script>
-      const statusElement = document.getElementById("status");
-      const messageElement = document.getElementById("message");
-
-      function getUserPayload() {
-        return {
-          name: document.getElementById("user-name").value,
-          age: Number(document.getElementById("user-age").value),
-          email: document.getElementById("user-email").value,
-        };
-      }
-
-      async function callUserRoute(method) {
-        const userId = document.getElementById("user-id").value.trim();
-        const response = await fetch(`/api/users/${encodeURIComponent(userId)}`, {
-          method,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: method === "DELETE" ? undefined : JSON.stringify(getUserPayload()),
-        });
-
-        const data = await response.json().catch(() => ({}));
-        messageElement.textContent = response.ok
-          ? data.nachricht || "Aktion erfolgreich ausgeführt."
-          : data.detail || "Die Aktion konnte nicht ausgeführt werden.";
-      }
-
-      document.getElementById("create-user").addEventListener("click", () => {
-        callUserRoute("POST");
-      });
-
-      document.getElementById("update-user").addEventListener("click", () => {
-        callUserRoute("PUT");
-      });
-
-      document.getElementById("delete-user").addEventListener("click", () => {
-        callUserRoute("DELETE");
-      });
-
       fetch("/api/health")
         .then((res) => res.json())
         .then((data) => {
-          statusElement.textContent = data.status;
+          document.getElementById("status").textContent = data.status;
         })
         .catch(() => {
-          statusElement.textContent = "fehler";
+          document.getElementById("status").textContent = "fehler";
         });
     </script>
   </body>

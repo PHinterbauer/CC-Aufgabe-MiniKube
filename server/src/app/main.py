@@ -1,16 +1,7 @@
-from fastapi import FastAPI, HTTPException, Query, Request, Response
+from fastapi import FastAPI, Query, Request, Response
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, generate_latest
-from pydantic import BaseModel
 
 from app.core import add
-
-
-class User(BaseModel):
-    name: str
-    age: int
-    email: str
-
-users_db: dict[int, User] = {}
 
 
 app = FastAPI(title="Test API", version="0.1.0")
@@ -71,30 +62,6 @@ def add_route(
 @app.get("/metrics")
 def metrics() -> Response:
     return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
-
-
-@app.post("/api/users/{user_id}")
-def create_user(user_id: int, user: User) -> dict:
-    if user_id in users_db:
-        raise HTTPException(status_code=400, detail="Benutzer existiert bereits")
-    users_db[user_id] = user
-    return {"nachricht": "Benutzer erfolgreich angelegt", "benutzer": user}
-
-
-@app.put("/api/users/{user_id}")
-def update_user(user_id: int, user: User) -> dict:
-    if user_id not in users_db:
-        raise HTTPException(status_code=404, detail="Benutzer nicht gefunden")
-    users_db[user_id] = user
-    return {"nachricht": "Benutzer erfolgreich bearbeitet", "benutzer": user}
-
-
-@app.delete("/api/users/{user_id}")
-def delete_user(user_id: int) -> dict:
-    if user_id not in users_db:
-        raise HTTPException(status_code=404, detail="Benutzer nicht gefunden")
-    del users_db[user_id]
-    return {"nachricht": "Benutzer erfolgreich gelöscht"}
 
 
 if __name__ == "__main__":
