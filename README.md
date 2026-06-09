@@ -15,7 +15,7 @@ After the containers start, open:
 | Client | http://localhost:8080 |
 | Server API | http://localhost:8000 |
 | Grafana | http://localhost:3000 |
-| Prometheus | http://localhost:9000 |
+| Prometheus | http://localhost:9090 |
 
 Stop the stack with:
 
@@ -120,5 +120,5 @@ The script `deploy-local.ps1` will run `docker-compose.yml`. The services run on
 | Client (nginx)           | 8080 |
 | Server (python fastapi)  | 8000 |
 | Grafana                  | 3000 |
-| Prometheus               | 9000 |
+| Prometheus               | 9090 |
 
