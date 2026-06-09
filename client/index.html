@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Test Client</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        margin: 2rem;
+        color: #1f2937;
+      }
+      .card {
+        max-width: 480px;
+        padding: 1.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      }
+      h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.5rem;
+      }
+      p {
+        margin: 0 0 1rem 0;
+      }
+      code {
+        background: #f3f4f6;
+        padding: 0.2rem 0.4rem;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>FastAPI + Nginx</h1>
+      <p>Status: <span id="status">lade...</span></p>
+      <p>
+        Beispiel:
+        <code>/api/add?x=2&amp;y=3</code>
+      </p>
+    </div>
+    <script>
+      fetch("/api/health")
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("status").textContent = data.status;
+        })
+        .catch(() => {
+          document.getElementById("status").textContent = "fehler";
+        });
+    </script>
+  </body>
+</html>

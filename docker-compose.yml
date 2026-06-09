@@ -1,0 +1,41 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: test_server
+    ports:
+      - "8000:8000"
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: test_client
+    depends_on:
+      - server
+    ports:
+      - "8080:80"
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      # Provisioning config from repo (datasources/dashboards providers)
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      # Bind-mount dashboard JSONs from repo (overrides dashboards dir inside volume)
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      # Persistent Grafana state (grafana.db, users, plugins, etc.)
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  grafana_data:
