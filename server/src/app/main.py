@@ -27,7 +27,7 @@ async def count_requests(request: Request, call_next):
 @app.get("/api/health")
 def health() -> dict:
     checks = {}
-    errors = {}
+    errors_ = {}
 
     try:
         if add(1, 2) != 3:
