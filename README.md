@@ -1,4 +1,45 @@
 # Content
+
+## Quickstart
+
+### Run the full stack with Docker Compose
+
+```sh
+docker compose up --build
+```
+
+After the containers start, open:
+
+| Service | URL |
+| ------- | --- |
+| Client | http://localhost:8080 |
+| Server API | http://localhost:8000 |
+| Grafana | http://localhost:3000 |
+| Prometheus | http://localhost:9000 |
+
+Stop the stack with:
+
+```sh
+docker compose down
+```
+
+### Run the server locally
+
+```sh
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[test]"
+uvicorn app.main:app --reload --app-dir server/src
+```
+
+The FastAPI server is available at http://localhost:8000.
+
+Run the test suite with:
+
+```sh
+pytest
+```
+
 ## Code
 This repository contains a small FastAPI app in `server/src/app` and a simple Nginx client in `client/`.
 
