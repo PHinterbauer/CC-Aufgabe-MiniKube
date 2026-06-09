@@ -102,6 +102,23 @@
         margin: 0.75rem 0 0;
         padding-left: 1.2rem;
       }
+      .user-list {
+        margin: 0.75rem 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.75rem;
+      }
+      .user-item {
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 14px;
+        padding: 0.85rem 1rem;
+        background: #fff;
+      }
+      .user-item strong {
+        display: block;
+        margin-bottom: 0.25rem;
+      }
     </style>
   </head>
   <body>
@@ -135,11 +152,17 @@
         <div class="panel">
           <p><strong>Wichtige Endpunkte</strong></p>
           <ul class="endpoint-list">
+            <li><span class="mono">GET /api/users</span></li>
             <li><span class="mono">POST /api/users/{id}</span></li>
             <li><span class="mono">PUT /api/users/{id}</span></li>
             <li><span class="mono">DELETE /api/users/{id}</span></li>
             <li><span class="mono">GET /api/health</span></li>
             <li><span class="mono">GET /metrics</span></li>
+          </ul>
+
+          <p style="margin-top: 1rem;"><strong>Aktuelle Benutzer</strong></p>
+          <ul id="users-list" class="user-list">
+            <li class="user-item">Lade Benutzer...</li>
           </ul>
         </div>
       </div>
@@ -156,6 +179,33 @@
         };
       }
 
+      function renderUsers(users) {
+        const listElement = document.getElementById("users-list");
+
+        if (!users.length) {
+          listElement.innerHTML = '<li class="user-item">Keine Benutzer vorhanden.</li>';
+          return;
+        }
+
+        listElement.innerHTML = users
+          .map(
+            (user) => `
+              <li class="user-item">
+                <strong>#${user.id} - ${user.name}</strong>
+                <div>Alter: ${user.age}</div>
+                <div>E-Mail: ${user.email}</div>
+              </li>
+            `,
+          )
+          .join("");
+      }
+
+      async function refreshUsers() {
+        const response = await fetch("/api/users");
+        const data = await response.json();
+        renderUsers(data.users || []);
+      }
+
       async function callUserRoute(method) {
         const userId = document.getElementById("user-id").value.trim();
         const response = await fetch(`/api/users/${encodeURIComponent(userId)}`, {
@@ -170,6 +220,10 @@
         messageElement.textContent = response.ok
           ? data.nachricht || "Aktion erfolgreich ausgeführt."
           : data.detail || "Die Aktion konnte nicht ausgeführt werden.";
+
+        if (response.ok) {
+          await refreshUsers();
+        }
       }
 
       document.getElementById("create-user").addEventListener("click", () => {
@@ -192,6 +246,10 @@
         .catch(() => {
           statusElement.textContent = "fehler";
         });
+
+      refreshUsers().catch(() => {
+        renderUsers([]);
+      });
     </script>
   </body>
 </html>

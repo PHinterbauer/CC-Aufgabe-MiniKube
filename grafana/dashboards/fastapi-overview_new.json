@@ -213,7 +213,7 @@
       "targets": [
         {
           "editorMode": "builder",
-          "expr": "http_requests_total{path=~\"/api/users/.*\"}",
+          "expr": "http_requests_total{path=~\"/api/users(/.*)?\"}",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -221,6 +221,66 @@
       ],
       "title": "Route /api/users Request Count",
       "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 14
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "expr": "http_requests_total{path=\"/api/users\"}",
+          "instant": true,
+          "legendFormat": "list users",
+          "refId": "A"
+        }
+      ],
+      "title": "Route /api/users Request Count",
+      "type": "stat"
     },
     {
       "datasource": "Prometheus",

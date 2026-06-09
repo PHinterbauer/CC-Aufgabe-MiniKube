@@ -34,6 +34,32 @@ def test_metrics():
     assert "text/plain" in response.headers.get("content-type", "")
 
 
+def test_list_users_route():
+    client = TestClient(app)
+
+    empty_response = client.get("/api/users")
+    assert empty_response.status_code == 200
+    assert empty_response.json() == {"users": []}
+
+    client.post(
+        "/api/users/1",
+        json={"name": "Anna", "age": 31, "email": "anna@example.com"},
+    )
+
+    response = client.get("/api/users")
+    assert response.status_code == 200
+    assert response.json() == {
+        "users": [
+            {
+                "id": 1,
+                "name": "Anna",
+                "age": 31,
+                "email": "anna@example.com",
+            }
+        ]
+    }
+
+
 def test_create_update_delete_user_routes():
     client = TestClient(app)
 

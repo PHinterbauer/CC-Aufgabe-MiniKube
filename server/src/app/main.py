@@ -74,6 +74,16 @@ def metrics() -> Response:
     return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
+@app.get("/api/users")
+def list_users() -> dict:
+    return {
+        "users": [
+            {"id": user_id, **user.model_dump()}
+            for user_id, user in sorted(users_db.items())
+        ]
+    }
+
+
 @app.post("/api/users/{user_id}")
 def create_user(user_id: int, user: User) -> dict:
     if user_id in users_db:
